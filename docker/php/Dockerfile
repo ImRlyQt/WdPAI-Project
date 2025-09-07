@@ -27,14 +27,17 @@ RUN apk add --no-cache --virtual .build-deps $BUILD_DEPS \
     && docker-php-ext-install -j "$(nproc)" $PHP_EXTENSIONS \
     && apk del .build-deps
 
-RUN apk add --no-cache --virtual .run-deps $RUN_DEPS
+RUN apk add --no-cache --virtual .run-deps $RUN_DEPS postgresql-client
 
 RUN echo 'memory_limit = -1' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini;
 
 # Ensure the pdo_pgsql extension is enabled
 RUN docker-php-ext-enable pdo_pgsql
 
+
 # Copy the application code
 COPY . /app
+COPY /wait-for-postgres.sh /usr/local/bin/wait-for-postgres.sh
+RUN chmod +x /usr/local/bin/wait-for-postgres.sh
 
 VOLUME ["/app"]

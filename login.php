@@ -6,41 +6,43 @@
   <title>Sign in</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./public/css/globals.css" />
+  <link rel="stylesheet" href="./public/css/auth.css" />
 
 </head>
 
-<body>
-  <main>
+<body class="auth-bg">
+  <main class="auth-main">
     <h1 class="logo">DeckHeaven</h1>
     <div class="wrapper">
       <div class="container">
         <h2>Sign in</h2>
         <p>Please login to continue to your account.</p>
-        <form>
-          <input type="email" placeholder="Email" required />
-
+        <?php if (isset($_GET['error']) && $_GET['error'] === 'invalid'): ?>
+          <p style="color:#f55">Invalid email or password.</p>
+        <?php elseif (isset($_GET['error']) && $_GET['error'] === 'missing'): ?>
+          <p style="color:#f55">Please fill all fields.</p>
+        <?php elseif (isset($_GET['registered'])): ?>
+          <p style="color:#5f5">Registration successful! Please log in.</p>
+        <?php endif; ?>
+        <form method="POST" action="login_action.php">
+          <input class="login-input" type="email" name="email" placeholder="Email" required />
           <div class="password-wrapper">
-            <input type="password" id="password" placeholder="Password" required />
+            <input type="password" id="password" class="login-input" name="password" placeholder="Password" required />
             <i class="fa fa-eye toggle-password" onclick="togglePassword()" aria-hidden="true"></i>
           </div>
-
           <div class="checkbox">
-            <input type="checkbox" id="keep" />
+            <input  type="checkbox" id="keep" />
             <label for="keep">Keep me logged in</label>
           </div>
-
           <button type="submit">Sign in</button>
         </form>
-
         <div class="register">
-          Don’t have an account? <a href="#">Register</a>
+          Don’t have an account? <a href="registration.php">Register</a>
         </div>
       </div>
       <div class="underglow-container">
         <img src="./public/assets/cards/skolim.svg" style="width: 40%" />
-
       </div>
-    </div>
     </div>
     <div class="underglow"></div>
   </main>

@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -179,7 +186,6 @@
         }
     </style>
 </head>
-
 <body>
     <header>
         <h1 class="logo">DeckHeaven</h1>
@@ -194,8 +200,8 @@
         <!-- Lewy panel profilowy -->
         <aside class="sidebar">
             <img src="https://avatars.githubusercontent.com/u/583231?v=4" alt="Profile picture">
-            <h2>MaciekPL</h2>
-            <p>jakieś info o profilu<br>idk coś tam bio</p>
+            <h2><?php echo htmlspecialchars($_SESSION['nick']); ?></h2>
+            <p>Welcome to your profile!</p>
 
             <!-- Search bar do kart w klaserze -->
             <div class="search-bar">

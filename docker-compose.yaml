@@ -24,6 +24,11 @@ services:
       - pg-network
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U docker -d db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
   
   php:
     build:
@@ -33,6 +38,10 @@ services:
       - .:/app
     networks:
       - pg-network
+    depends_on:
+      db:
+        condition: service_healthy
+    entrypoint: ["/usr/local/bin/wait-for-postgres.sh", "db", "php-fpm"]
   
   pgadmin:
     image: dpage/pgadmin4:latest
