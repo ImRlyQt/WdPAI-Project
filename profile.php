@@ -10,7 +10,7 @@
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background-color: #111;
+            background-color: #101010;
             color: white;
             height: 100vh;
             display: flex;
@@ -182,7 +182,7 @@
 
 <body>
     <header>
-        <h1 class="jq24 title">DeckHeaven</h1>
+        <h1 class="logo">DeckHeaven</h1>
         <!-- Search bar do profili -->
         <div class="search-bar">
             <input type="text" placeholder="Search Profiles">
@@ -208,61 +208,7 @@
         <main class="content">
             <div class="cards-grid">
                 <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73908&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73910&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73911&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73912&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73913&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73914&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73915&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73916&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73908&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73910&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73911&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73912&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73913&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73914&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73915&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73916&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73908&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73910&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73911&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73912&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73913&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73914&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73915&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73916&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73908&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73910&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73911&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73912&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73913&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73914&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73915&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73916&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73908&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73910&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73911&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73912&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73913&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73914&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73915&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73916&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73908&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73910&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73911&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73912&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73913&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73914&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73915&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73916&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73908&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73910&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73911&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73912&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73913&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73914&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73915&type=card">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73916&type=card">
+
 
             </div>
         </main>
