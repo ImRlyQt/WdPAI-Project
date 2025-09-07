@@ -15,6 +15,10 @@ if (!$user) {
     echo 'User not found.';
     exit();
 }
+// Fetch user's cards
+$cardsStmt = $conn->prepare('SELECT name, image_url, multiverseid FROM user_cards WHERE user_id = :id ORDER BY id DESC');
+$cardsStmt->execute(['id' => $user_id]);
+$cards = $cardsStmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -84,6 +88,19 @@ if (!$user) {
             padding: 2rem;
             overflow-y: auto;
         }
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+        .cards-grid img {
+            width: 100%;
+            border-radius: 0.5rem;
+            transition: transform 0.2s;
+        }
+        .cards-grid img:hover {
+            transform: scale(1.05);
+        }
         @media (max-width: 768px) {
             header {
                 flex-direction: column;
@@ -122,7 +139,25 @@ if (!$user) {
             <p>This is a public profile.</p>
         </aside>
         <main class="content">
-            <div style="color:#aaa;font-size:1.1rem;">Date of birth: <?php echo htmlspecialchars($user['dob']); ?></div>
+            <div style="color:#aaa;font-size:1.1rem; margin-bottom:1rem;">Date of birth: <?php echo htmlspecialchars($user['dob']); ?></div>
+            <h3 style="margin:0 0 1rem 0;">Cards</h3>
+            <?php if (empty($cards)): ?>
+                <div style="color:#aaa;">No cards yet.</div>
+            <?php else: ?>
+                <div class="cards-grid">
+                    <?php foreach ($cards as $c): 
+                        $img = $c['image_url'];
+                        if (!$img && !empty($c['multiverseid'])) {
+                            $img = 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid='.((int)$c['multiverseid']).'&type=card';
+                        }
+                    ?>
+                    <div class="card-thumb" style="position:relative;">
+                        <img src="<?php echo htmlspecialchars($img ?? ''); ?>" alt="<?php echo htmlspecialchars($c['name']); ?>" style="display:block;width:100%;border-radius:0.5rem;" />
+                        <span class="qty-badge" style="position:absolute;left:6px;bottom:6px;background:rgba(0,0,0,0.7);color:#fff;padding:2px 6px;border-radius:6px;font-size:0.8rem;opacity:0;transition:opacity .15s;">x<?php echo (int)($c['quantity'] ?? 1); ?></span>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
             <a href="profile.php" style="color:#2d63ff;display:inline-block;margin-top:1rem;">Back to my profile</a>
         </main>
     </div>

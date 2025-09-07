@@ -205,19 +205,16 @@ if (!isset($_SESSION['user_id'])) {
             <p>Welcome to your profile!</p>
 
             <!-- Search bar do kart w klaserze -->
-            <div class="search-bar">
-                <input type="text" placeholder="Search cards">
+            <div class="search-bar" style="position:relative;">
+                <input type="text" id="card-search" placeholder="Search cards" autocomplete="off">
                 <i class="fa fa-search"></i>
+                <div id="card-search-results" style="position:absolute;top:110%;left:0;width:100%;background:#222;border-radius:0 0 1rem 1rem;z-index:10;display:none;max-height:260px;overflow-y:auto;"></div>
             </div>
         </aside>
 
         <!-- Panel z kartami -->
         <main class="content">
-            <div class="cards-grid">
-                <img src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=73908&type=card">
-
-
-            </div>
+            <div id="my-cards" class="cards-grid"></div>
         </main>
     </div>
 </body>
@@ -250,6 +247,70 @@ document.addEventListener('click', function(e) {
     if (!searchInput.contains(e.target) && !resultsBox.contains(e.target)) {
         resultsBox.style.display = 'none';
     }
+});
+</script>
+<script>
+// Cards search + add to collection
+const cardInput = document.getElementById('card-search');
+const cardBox = document.getElementById('card-search-results');
+let cardTimeout;
+cardInput.addEventListener('input', function() {
+    clearTimeout(cardTimeout);
+    const q = this.value.trim();
+    if (!q) { cardBox.style.display='none'; cardBox.innerHTML=''; return; }
+    cardTimeout = setTimeout(()=>{
+        fetch('search_cards.php?q=' + encodeURIComponent(q))
+            .then(r=>r.json())
+            .then(list=>{
+                if (!Array.isArray(list) || list.length===0) {
+                    cardBox.innerHTML = '<div style="padding:0.5rem;color:#aaa;">No cards</div>';
+                } else {
+                    cardBox.innerHTML = list.map(c=>{
+                        const img = c.image ? `<img src='${c.image}' style='height:40px;border-radius:4px;margin-right:8px;'>` : '';
+                        return `<div style='display:flex;align-items:center;padding:0.5rem;gap:8px;cursor:pointer;color:#fff;' onmouseover='this.style.background="#333"' onmouseout='this.style.background=""' onclick='addCard(${JSON.stringify(c).replace(/"/g, "&quot;")})'>${img}<div><div style="font-weight:600">${c.name}</div><div style="color:#aaa;font-size:0.8rem">${c.setName||''}</div></div></div>`;
+                    }).join('');
+                }
+                cardBox.style.display='block';
+            })
+    }, 300);
+});
+document.addEventListener('click', (e)=>{
+    if (!cardInput.contains(e.target) && !cardBox.contains(e.target)) {
+        cardBox.style.display='none';
+    }
+});
+
+function addCard(card){
+    fetch('add_card.php', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(card)})
+        .then(r=>r.json())
+        .then(res=>{ cardBox.style.display='none'; loadMyCards(); });
+}
+
+function loadMyCards(){
+    fetch('get_cards.php')
+        .then(r=>r.json())
+        .then(cards=>{
+            const wrap = document.getElementById('my-cards');
+            if (!Array.isArray(cards) || cards.length===0){ wrap.innerHTML = '<div style="color:#aaa;">No cards yet. Search above to add some.</div>'; return; }
+                    wrap.innerHTML = cards.map(c=>`
+                        <div class='card-thumb' style="position:relative;">
+                            <img src='${c.image_url || ''}' alt='${c.name}' style="display:block;width:100%;border-radius:0.5rem;">
+                            <span class='qty-badge' style="position:absolute;left:6px;bottom:6px;background:rgba(0,0,0,0.7);color:#fff;padding:2px 6px;border-radius:6px;font-size:0.8rem;opacity:0;transition:opacity .15s;">x${c.quantity||1}</span>
+                        </div>
+                    `).join('');
+        });
+}
+loadMyCards();
+</script>
+<script>
+// Show quantity badge on hover
+document.addEventListener('mouseover', function(e){
+    const thumb = e.target.closest('.card-thumb');
+    if (thumb){ const b = thumb.querySelector('.qty-badge'); if (b) b.style.opacity = '1'; }
+});
+document.addEventListener('mouseout', function(e){
+    const thumb = e.target.closest('.card-thumb');
+    if (thumb){ const b = thumb.querySelector('.qty-badge'); if (b) b.style.opacity = '0'; }
 });
 </script>
 </html>
