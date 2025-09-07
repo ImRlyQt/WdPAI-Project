@@ -190,9 +190,10 @@ if (!isset($_SESSION['user_id'])) {
     <header>
         <h1 class="logo">DeckHeaven</h1>
         <!-- Search bar do profili -->
-        <div class="search-bar">
-            <input type="text" placeholder="Search Profiles">
+        <div class="search-bar" style="position:relative;">
+            <input type="text" id="profile-search" placeholder="Search Profiles" autocomplete="off">
             <i class="fa fa-search"></i>
+            <div id="profile-search-results" style="position:absolute;top:110%;left:0;width:100%;background:#222;border-radius:0 0 1rem 1rem;z-index:10;display:none;max-height:200px;overflow-y:auto;"></div>
         </div>
     </header>
 
@@ -220,5 +221,35 @@ if (!isset($_SESSION['user_id'])) {
         </main>
     </div>
 </body>
-
+<script>
+const searchInput = document.getElementById('profile-search');
+const resultsBox = document.getElementById('profile-search-results');
+let searchTimeout;
+searchInput.addEventListener('input', function() {
+    clearTimeout(searchTimeout);
+    const q = this.value.trim();
+    if (!q) {
+        resultsBox.style.display = 'none';
+        resultsBox.innerHTML = '';
+        return;
+    }
+    searchTimeout = setTimeout(() => {
+        fetch('search_profiles.php?q=' + encodeURIComponent(q))
+            .then(r => r.json())
+            .then(data => {
+                if (data.length === 0) {
+                    resultsBox.innerHTML = '<div style="padding:0.5rem;color:#aaa;">No profiles found</div>';
+                } else {
+                    resultsBox.innerHTML = data.map(u => `<div style='padding:0.5rem;cursor:pointer;color:#fff;' onmouseover='this.style.background="#333"' onmouseout='this.style.background=""' onclick='window.location.href="public_profile.php?user_id=${u.id}"'>${u.nick}</div>`).join('');
+                }
+                resultsBox.style.display = 'block';
+            });
+    }, 250);
+});
+document.addEventListener('click', function(e) {
+    if (!searchInput.contains(e.target) && !resultsBox.contains(e.target)) {
+        resultsBox.style.display = 'none';
+    }
+});
+</script>
 </html>
