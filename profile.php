@@ -44,12 +44,14 @@ if (!$u) {
             <i class="fa fa-search"></i>
             <div id="profile-search-results" style="position:absolute;top:110%;left:0;width:100%;background:#222;border-radius:0 0 1rem 1rem;z-index:10;display:none;max-height:200px;overflow-y:auto;"></div>
         </div>
-    <?php if (!$isPublic): ?>
-        <div style="display:flex; align-items:center;">
-                    <a class="logout-btn" href="/logout.php" title="Log out">Log out</a>
-                    <button id="delete-account-btn" class="danger-btn" type="button" title="Delete account">Delete account</button>
-                </div>
-    <?php endif; ?>
+        <?php if (!$isPublic): ?>
+            <div style="display:flex; align-items:center;">
+                <a class="logout-btn" href="/logout.php" title="Log out">Log out</a>
+                <button id="delete-account-btn" class="danger-btn" type="button" title="Delete account">Delete account</button>
+            </div>
+        <?php elseif ($sessionUserId): ?>
+            <a class="back-btn" href="/profile.php" title="Back to my profile">Back to my profile</a>
+        <?php endif; ?>
     </header>
 
     <div class="layout">
