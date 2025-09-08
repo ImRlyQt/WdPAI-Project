@@ -44,9 +44,12 @@ if (!$u) {
             <i class="fa fa-search"></i>
             <div id="profile-search-results" style="position:absolute;top:110%;left:0;width:100%;background:#222;border-radius:0 0 1rem 1rem;z-index:10;display:none;max-height:200px;overflow-y:auto;"></div>
         </div>
-        <?php if (!$isPublic): ?>
-            <a class="logout-btn" href="/logout.php" title="Log out">Log out</a>
-        <?php endif; ?>
+    <?php if (!$isPublic): ?>
+        <div style="display:flex; align-items:center;">
+                    <a class="logout-btn" href="/logout.php" title="Log out">Log out</a>
+                    <button id="delete-account-btn" class="danger-btn" type="button" title="Delete account">Delete account</button>
+                </div>
+    <?php endif; ?>
     </header>
 
     <div class="layout">
@@ -72,6 +75,24 @@ if (!$u) {
         </main>
     </div>
 </body>
+<?php if (!$isPublic): ?>
+<!-- Delete account modal -->
+<div id="delete-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="del-title">
+    <div class="modal">
+        <header>
+            <div id="del-title">Delete account</div>
+            <button id="del-close" class="btn cancel" type="button" aria-label="Close">✕</button>
+        </header>
+        <div class="body">
+            This action is permanent. Your account and all saved cards will be deleted. Are you sure you want to continue?
+        </div>
+        <div class="actions">
+            <button id="del-cancel" class="btn cancel" type="button">Cancel</button>
+            <button id="del-confirm" class="btn danger" type="button">Yes, delete</button>
+        </div>
+    </div>
+ </div>
+<?php endif; ?>
 <script>
 const searchInput = document.getElementById('profile-search');
 const resultsBox = document.getElementById('profile-search-results');
@@ -191,5 +212,29 @@ document.addEventListener('click', function(e){
         .catch(()=>{})
         .finally(()=>{ btn.style.pointerEvents = ''; });
 });
+<?php if (!$isPublic): ?>
+// Delete account modal logic
+const delBtn = document.getElementById('delete-account-btn');
+const delModal = document.getElementById('delete-modal');
+const delCancel = document.getElementById('del-cancel');
+const delClose = document.getElementById('del-close');
+const delConfirm = document.getElementById('del-confirm');
+
+function openDelModal(){ delModal.style.display='flex'; }
+function closeDelModal(){ delModal.style.display='none'; }
+delBtn && delBtn.addEventListener('click', openDelModal);
+delCancel && delCancel.addEventListener('click', closeDelModal);
+delClose && delClose.addEventListener('click', closeDelModal);
+delModal && delModal.addEventListener('click', (e)=>{ if(e.target === delModal) closeDelModal(); });
+
+delConfirm && delConfirm.addEventListener('click', ()=>{
+    delConfirm.disabled = true;
+    fetch('/api/delete_account.php', { method:'POST' })
+        .then(r=>r.json())
+        .then(() => { window.location.href = '/login.php'; })
+        .catch(() => { closeDelModal(); })
+        .finally(()=>{ delConfirm.disabled = false; });
+});
+<?php endif; ?>
 </script>
 </html>
