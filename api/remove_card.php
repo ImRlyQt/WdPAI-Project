@@ -9,23 +9,24 @@ require_once dirname(__DIR__) . '/config/db.php';
 $body = file_get_contents('php://input');
 $payload = json_decode($body, true);
 $cardId = is_array($payload) ? trim($payload['card_id'] ?? '') : '';
+$targetUser = (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] && isset($payload['user_id'])) ? (int)$payload['user_id'] : (int)$_SESSION['user_id'];
 if ($cardId === '') { http_response_code(400); echo json_encode(['error'=>'missing_card_id']); exit(); }
 
 try {
     // Try to decrement if quantity > 1
     $dec = $conn->prepare('UPDATE user_cards SET quantity = quantity - 1 WHERE user_id = :uid AND card_id = :cid AND quantity > 1');
-    $dec->execute([':uid' => $_SESSION['user_id'], ':cid' => $cardId]);
+    $dec->execute([':uid' => $targetUser, ':cid' => $cardId]);
     if ($dec->rowCount() > 0) {
         // Fetch new quantity for response
         $q = $conn->prepare('SELECT quantity FROM user_cards WHERE user_id = :uid AND card_id = :cid');
-        $q->execute([':uid' => $_SESSION['user_id'], ':cid' => $cardId]);
+    $q->execute([':uid' => $targetUser, ':cid' => $cardId]);
         $row = $q->fetch(PDO::FETCH_ASSOC);
         echo json_encode(['ok'=>true, 'quantity'=>(int)($row['quantity'] ?? 1)]);
         exit();
     }
     // Else delete if quantity is 1 (or record exists with 1)
     $del = $conn->prepare('DELETE FROM user_cards WHERE user_id = :uid AND card_id = :cid');
-    $del->execute([':uid' => $_SESSION['user_id'], ':cid' => $cardId]);
+    $del->execute([':uid' => $targetUser, ':cid' => $cardId]);
     if ($del->rowCount() > 0) {
         echo json_encode(['ok'=>true, 'deleted'=>true]);
         exit();

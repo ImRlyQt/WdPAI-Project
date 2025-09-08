@@ -8,8 +8,11 @@ require_once dirname(__DIR__) . '/config/db.php';
 
 try {
     $conn->beginTransaction();
+    $payload = json_decode(file_get_contents('php://input'), true) ?: [];
+    $isAdmin = !empty($_SESSION['is_admin']);
+    $targetId = ($isAdmin && isset($payload['user_id'])) ? (int)$payload['user_id'] : (int)$_SESSION['user_id'];
     $stmt = $conn->prepare('DELETE FROM users WHERE id = :id');
-    $stmt->execute([':id' => (int)$_SESSION['user_id']]);
+    $stmt->execute([':id' => $targetId]);
     if ($stmt->rowCount() === 0) {
         $conn->rollBack();
         http_response_code(404);
@@ -17,13 +20,15 @@ try {
         exit();
     }
     $conn->commit();
-    // Destroy the session after deletion
-    $_SESSION = [];
-    if (ini_get('session.use_cookies')) {
-        $params = session_get_cookie_params();
-        setcookie(session_name(), '', time() - 42000, $params['path'], $params['domain'] ?? '', !empty($params['secure']), !empty($params['httponly']));
+    // If the current user deleted their own account, end session; otherwise keep admin session active
+    if ($targetId === (int)$_SESSION['user_id']) {
+        $_SESSION = [];
+        if (ini_get('session.use_cookies')) {
+            $params = session_get_cookie_params();
+            setcookie(session_name(), '', time() - 42000, $params['path'], $params['domain'] ?? '', !empty($params['secure']), !empty($params['httponly']));
+        }
+        session_destroy();
     }
-    session_destroy();
     echo json_encode(['ok' => true]);
 } catch (Throwable $e) {
     if ($conn && $conn->inTransaction()) { $conn->rollBack(); }

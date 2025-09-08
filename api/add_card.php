@@ -7,6 +7,7 @@ require_once dirname(__DIR__) . '/config/db.php';
 $body = file_get_contents('php://input');
 $payload = json_decode($body, true);
 if (!$payload) { http_response_code(400); echo json_encode(['error'=>'invalid_json']); exit(); }
+$targetUser = (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] && isset($payload['user_id'])) ? (int)$payload['user_id'] : (int)$_SESSION['user_id'];
 $name = trim($payload['name'] ?? '');
 $cardId = trim($payload['id'] ?? '');
 $image = trim($payload['image'] ?? '');
@@ -19,7 +20,7 @@ try {
         ON CONFLICT (user_id, card_id)
         DO UPDATE SET quantity = user_cards.quantity + 1');
     $stmt->execute([
-        ':uid' => $_SESSION['user_id'],
+        ':uid' => $targetUser,
         ':cid' => $cardId,
         ':name' => $name,
         ':img' => $image,

@@ -9,6 +9,7 @@ if (!$viewedUserId) {
     exit();
 }
 $isPublic = ($sessionUserId === 0) || ($viewedUserId !== $sessionUserId);
+$isAdmin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 
 // Fetch display user info
 $u = null;
@@ -62,7 +63,7 @@ if (!$u) {
             <p><?php echo $isPublic ? 'This is a public profile.' : 'Welcome to your profile!'; ?></p>
 
             <!-- Search bar do kart w klaserze -->
-            <?php if (!$isPublic): ?>
+            <?php if (!$isPublic || $isAdmin): ?>
                 <div class="search-bar" style="position:relative;">
                     <input type="text" id="card-search" placeholder="Search cards" autocomplete="off">
                     <i class="fa fa-search"></i>
@@ -129,9 +130,10 @@ document.addEventListener('click', function(e) {
 <script>
 // Cards search + add to collection
 const isPublic = <?php echo $isPublic ? 'true' : 'false'; ?>;
+const isAdmin = <?php echo $isAdmin ? 'true' : 'false'; ?>;
 const viewedUserId = <?php echo (int)$viewedUserId; ?>;
 let cardInput = null, cardBox = null, cardTimeout;
-if (!isPublic) {
+if (!isPublic || isAdmin) {
     cardInput = document.getElementById('card-search');
     cardBox = document.getElementById('card-search-results');
     cardInput.addEventListener('input', function() {
@@ -159,8 +161,9 @@ if (!isPublic) {
             cardBox.style.display='none';
         }
     });
-    function addCard(card){
-        fetch('/api/add_card.php', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(card)})
+        function addCard(card){
+            const payload = isAdmin && isPublic ? { ...card, user_id: viewedUserId } : card;
+            fetch('/api/add_card.php', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)})
             .then(r=>r.json())
             .then(res=>{ if (cardBox) cardBox.style.display='none'; loadMyCards(); });
     }
@@ -175,7 +178,7 @@ function loadMyCards(){
             if (!Array.isArray(cards) || cards.length===0){ wrap.innerHTML = '<div style="color:#aaa;">No cards yet. Search above to add some.</div>'; return; }
                     wrap.innerHTML = cards.map(c=>{
                         const src = c.image_url || (c.multiverseid ? `https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=${c.multiverseid}&type=card` : '');
-                        const removeBtn = !isPublic ? `<div class='remove-btn' data-card-id='${c.card_id}' title='Remove' aria-label='Remove'>&times;</div>` : '';
+                        const removeBtn = (!isPublic || isAdmin) ? `<div class='remove-btn' data-card-id='${c.card_id}' title='Remove' aria-label='Remove'>&times;</div>` : '';
                         return `
                         <div class='card-thumb' style="position:relative;">
                             <img src='${src}' alt='${c.name}' style="display:block;width:100%;border-radius:0.5rem;">
@@ -202,13 +205,14 @@ document.addEventListener('mouseout', function(e){
 document.addEventListener('click', function(e){
     const btn = e.target.closest('.remove-btn');
     if (!btn) return;
-    if (isPublic) return; // safety
+    if (isPublic && !isAdmin) return; // allow admin to act on public profiles
     e.preventDefault();
     e.stopPropagation();
     const cardId = btn.getAttribute('data-card-id');
     if (!cardId) return;
     btn.style.pointerEvents = 'none';
-    fetch('/api/remove_card.php', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ card_id: cardId }) })
+    const payload = (isAdmin && isPublic) ? { card_id: cardId, user_id: viewedUserId } : { card_id: cardId };
+    fetch('/api/remove_card.php', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) })
         .then(r=>r.json())
         .then(() => { loadMyCards(); })
         .catch(()=>{})
