@@ -1,6 +1,6 @@
 <?php
 // login_action.php - handle login POST
-require_once 'db.php';
+require_once __DIR__ . '/config/db.php';
 session_start();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');

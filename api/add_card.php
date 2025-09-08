@@ -3,7 +3,7 @@
 session_start();
 header('Content-Type: application/json');
 if (!isset($_SESSION['user_id'])) { http_response_code(401); echo json_encode(['error'=>'unauthorized']); exit(); }
-require_once __DIR__ . '/config/db.php';
+require_once dirname(__DIR__) . '/config/db.php';
 $body = file_get_contents('php://input');
 $payload = json_decode($body, true);
 if (!$payload) { http_response_code(400); echo json_encode(['error'=>'invalid_json']); exit(); }

@@ -1,0 +1,52 @@
+/* Maintenance / out_of_service page styles */
+.title {
+  position: absolute;
+  width: 100%;
+  padding: 1.5625rem 3.125rem;
+}
+.maintenance {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+  padding: 40px;
+  color: white;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.text-side {
+  max-width: 500px;
+}
+.text-side h2 {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: left;
+}
+.text-side p {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+.underglow-container img.maintenance-hero {
+  width: 300%;
+}
+@media only screen and (max-width: 1000px) {
+  .wrapper {
+    margin-top: 5rem;
+  }
+  .title {
+    position: relative;
+    text-align: center;
+    padding: 1rem;
+    font-size: 1.5rem;
+  }
+  .maintenance {
+    flex-direction: column;
+    padding-top: 0;
+  }
+  .text-side {
+    max-width: 100%;
+    text-align: center;
+  }
+}

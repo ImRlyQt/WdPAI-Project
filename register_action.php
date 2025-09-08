@@ -1,6 +1,6 @@
 <?php
 // register_action.php - handle registration POST
-require_once 'db.php';
+require_once __DIR__ . '/config/db.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nick = trim($_POST['nick'] ?? '');
     $email = trim($_POST['email'] ?? '');
