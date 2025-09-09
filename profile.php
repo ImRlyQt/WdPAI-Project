@@ -106,6 +106,32 @@ if (!$u) {
 const searchInput = document.getElementById('profile-search');
 const resultsBox = document.getElementById('profile-search-results');
 let searchTimeout;
+// Helper to render dropdown as floating panel, not constrained by sidebar width
+function showFloatingDropdown(anchorEl, dropdownEl, minWidthPx){
+    if (!dropdownEl) return;
+    if (!dropdownEl.dataset.floating){
+        document.body.appendChild(dropdownEl);
+        dropdownEl.dataset.floating = '1';
+    }
+    const rect = anchorEl.getBoundingClientRect();
+    const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+    const desired = Math.max(minWidthPx || 420, rect.width);
+    const width = Math.min(desired, Math.max(320, vw - 24));
+    const left = Math.max(12, Math.min(rect.left, vw - width - 12));
+    dropdownEl.style.position = 'fixed';
+    dropdownEl.style.left = left + 'px';
+    dropdownEl.style.top = (rect.bottom + 6) + 'px';
+    dropdownEl.style.width = width + 'px';
+    dropdownEl.style.maxWidth = '92vw';
+    dropdownEl.style.background = '#222';
+    dropdownEl.style.border = '1px solid #333';
+    dropdownEl.style.borderRadius = '0 0 12px 12px';
+    dropdownEl.style.boxShadow = '0 10px 24px rgba(0,0,0,0.35)';
+    dropdownEl.style.zIndex = '2000';
+    dropdownEl.style.maxHeight = '320px';
+    dropdownEl.style.overflowY = 'auto';
+    dropdownEl.style.display = 'block';
+}
 searchInput.addEventListener('input', function() {
     clearTimeout(searchTimeout);
     const q = this.value.trim();
@@ -123,7 +149,7 @@ searchInput.addEventListener('input', function() {
                 } else {
                     resultsBox.innerHTML = data.map(u => `<div style='padding:0.5rem;cursor:pointer;color:#fff;' onmouseover='this.style.background="#333"' onmouseout='this.style.background=""' onclick='window.location.href="profile.php?user_id=${u.id}"'>${u.nick}</div>`).join('');
                 }
-                resultsBox.style.display = 'block';
+                showFloatingDropdown(searchInput, resultsBox, 420);
             });
     }, 250);
 });
@@ -158,7 +184,7 @@ if (!isPublic || isAdmin) {
                             return `<div style='display:flex;align-items:center;padding:0.5rem;gap:8px;cursor:pointer;color:#fff;' onmouseover='this.style.background=\"#333\"' onmouseout='this.style.background=\"\"' onclick='addCard(${JSON.stringify(c).replace(/\"/g, "&quot;")})'>${img}<div><div style=\"font-weight:600\">${c.name}</div><div style=\"color:#aaa;font-size:0.8rem\">${c.setName||''}</div></div></div>`;
                         }).join('');
                     }
-                    cardBox.style.display='block';
+                    showFloatingDropdown(cardInput, cardBox, 200);
                 })
         }, 300);
     });
