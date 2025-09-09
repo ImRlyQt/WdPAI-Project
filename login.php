@@ -18,11 +18,11 @@
         <h2>Sign in</h2>
         <p>Please login to continue to your account.</p>
         <?php if (isset($_GET['error']) && $_GET['error'] === 'invalid'): ?>
-          <p style="color:#f55">Invalid email or password.</p>
+          <p class="auth-msg error">Invalid email or password.</p>
         <?php elseif (isset($_GET['error']) && $_GET['error'] === 'missing'): ?>
-          <p style="color:#f55">Please fill all fields.</p>
+          <p class="auth-msg error">Please fill all fields.</p>
         <?php elseif (isset($_GET['registered'])): ?>
-          <p style="color:#5f5">Registration successful! Please log in.</p>
+          <p class="auth-msg success">Registration successful! Please log in.</p>
         <?php endif; ?>
         <form method="POST" action="login_action.php">
           <input class="login-input" type="email" name="email" placeholder="Email" required />
@@ -40,9 +40,9 @@
           Don’t have an account? <a href="registration.php">Register</a>
         </div>
       </div>
-      <div class="underglow-container">
-        <img src="./public/assets/cards/skolim.svg" style="width: 40%" />
-      </div>
+        <div class="underglow-container">
+          <img class="auth-illustration" src="./public/assets/cards/skolim.svg" />
+        </div>
     </div>
     <div class="underglow"></div>
   </main>

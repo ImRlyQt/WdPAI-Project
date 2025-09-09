@@ -17,10 +17,10 @@
             <div class="container">
                 <h2>Register</h2>
                 <p>Sign up to enjoy the feature of Revolutie</p>
-                <?php if (isset($_GET['error']) && $_GET['error'] === 'exists'): ?>
-                  <p style="color:#f55">Email already registered.</p>
-                <?php elseif (isset($_GET['error']) && $_GET['error'] === 'missing'): ?>
-                  <p style="color:#f55">Please fill all fields.</p>
+                                <?php if (isset($_GET['error']) && $_GET['error'] === 'exists'): ?>
+                                    <p class="auth-msg error">Email already registered.</p>
+                                <?php elseif (isset($_GET['error']) && $_GET['error'] === 'missing'): ?>
+                                    <p class="auth-msg error">Please fill all fields.</p>
                 <?php endif; ?>
                 <form method="POST" action="register_action.php">
                     <input class="login-input" type="text" name="nick" placeholder="Nick" required />
@@ -37,7 +37,7 @@
                 </div>
             </div>
             <div class="underglow-container">
-                <img src="./public/assets/cards/brakSkolima.svg" style="width: 40%" />
+                <img class="auth-illustration" src="./public/assets/cards/brakSkolima.svg" />
             </div>
         </div>
         <div class="underglow"></div>
