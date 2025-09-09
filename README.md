@@ -41,10 +41,6 @@ Place screenshots and GIFs in `docs/screens/` and link them here.
 - [x] Admin role: manage any user’s cards and delete accounts
 - [x] Dockerized stack (Nginx, PHP-FPM, PostgreSQL, pgAdmin)
 - [x] Unified profile view with dynamic public/private/admin controls
-- [ ] CSRF protection for POST endpoints
-- [ ] Rate limiting / abuse protection on search proxy
-- [ ] Dedicated admin dashboard with user listing and actions
-- [ ] Full test coverage (unit + integration)
 
 ## Tech Stack
 - Backend: PHP 8.3 (FPM), PDO PostgreSQL
@@ -143,17 +139,7 @@ Add a diagram image here:
 - Use prepared statements for DB access; avoid hardcoding secrets
 - Discuss larger architectural changes in issues first
 
-## TODO
-- [ ] CSRF tokens for all POST endpoints
-- [ ] Inline toast notifications for success/errors
-- [ ] Admin dashboard page with pagination and search
-- [ ] Export/import collection (CSV/JSON)
-- [ ] Unit tests for services and repositories
-- [ ] Rate limiting for card search endpoint
-- [ ] Accessibility pass (keyboard navigation, ARIA)
 
-## Authors
-- Your Name – [@your-github](https://github.com/your-github)
 
 ## License
-This project is licensed under the MIT License. See `LICENSE` for details.
+idk idc ołpen sos
