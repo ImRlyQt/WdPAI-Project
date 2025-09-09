@@ -22,15 +22,14 @@ A lightweight PHP + PostgreSQL web app for building and showcasing Magic: The Ga
 - [License](#license)
 
 ## Screenshots / Demo
-Place screenshots and GIFs in `docs/screens/` and link them here.
 
-- Login page: `![Login](docs/screens/login.png)`
-- Registration page: `![Register](docs/screens/register.png)`
-- User dashboard/profile: `![Dashboard](docs/screens/profile.png)`
-- Admin panel: `![Admin](docs/screens/admin.png)`
-- Adding a card: `![Add Card](docs/screens/add-card.png)`
-- Full collection view: `![Collection](docs/screens/collection.png)`
-- Short demo GIF: `![Demo](docs/screens/demo.gif)`
+- Login page: `![Login](screens/login.png)`
+- Registration page: `![Register](screens/register.png)`
+- User dashboard/profile: `![Dashboard](screens/profile.png)`
+- Admin panel: `![Admin](screens/admin.png)`
+- Adding a card: `![Add Card](screens/add-card.png)`
+- Full collection view: `![Collection](screens/collection.png)`
+- Diagram ERD: `![Collection](screens/ERD.png)`
 
 ## Features
 - [x] User registration and login (hashed passwords)
