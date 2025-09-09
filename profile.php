@@ -51,7 +51,12 @@ if (!$u) {
                 <button id="delete-account-btn" class="danger-btn" type="button" title="Delete account">Delete account</button>
             </div>
         <?php elseif ($sessionUserId): ?>
-            <a class="back-btn" href="/profile.php" title="Back to my profile">Back to my profile</a>
+            <div style="display:flex; align-items:center;">
+                <a class="back-btn" href="/profile.php" title="Back to my profile">Back to my profile</a>
+                <?php if ($isAdmin): ?>
+                    <button id="delete-account-btn" class="danger-btn" type="button" title="Delete this account">Delete this account</button>
+                <?php endif; ?>
+            </div>
         <?php endif; ?>
     </header>
 
@@ -78,7 +83,7 @@ if (!$u) {
         </main>
     </div>
 </body>
-<?php if (!$isPublic): ?>
+<?php if (!$isPublic || $isAdmin): ?>
 <!-- Delete account modal -->
 <div id="delete-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="del-title">
     <div class="modal">
@@ -87,7 +92,7 @@ if (!$u) {
             <button id="del-close" class="btn cancel" type="button" aria-label="Close">✕</button>
         </header>
         <div class="body">
-            This action is permanent. Your account and all saved cards will be deleted. Are you sure you want to continue?
+    This action is permanent. The account and all saved cards will be deleted. Are you sure you want to continue?
         </div>
         <div class="actions">
             <button id="del-cancel" class="btn cancel" type="button">Cancel</button>
@@ -218,7 +223,7 @@ document.addEventListener('click', function(e){
         .catch(()=>{})
         .finally(()=>{ btn.style.pointerEvents = ''; });
 });
-<?php if (!$isPublic): ?>
+<?php if (!$isPublic || $isAdmin): ?>
 // Delete account modal logic
 const delBtn = document.getElementById('delete-account-btn');
 const delModal = document.getElementById('delete-modal');
@@ -235,9 +240,10 @@ delModal && delModal.addEventListener('click', (e)=>{ if(e.target === delModal) 
 
 delConfirm && delConfirm.addEventListener('click', ()=>{
     delConfirm.disabled = true;
-    fetch('/api/delete_account.php', { method:'POST' })
+    const body = (isAdmin && isPublic) ? JSON.stringify({ user_id: viewedUserId }) : '{}';
+    fetch('/api/delete_account.php', { method:'POST', headers:{'Content-Type':'application/json'}, body })
         .then(r=>r.json())
-        .then(() => { window.location.href = '/login.php'; })
+        .then(() => { window.location.href = (isAdmin && isPublic) ? '/profile.php' : '/login.php'; })
         .catch(() => { closeDelModal(); })
         .finally(()=>{ delConfirm.disabled = false; });
 });
