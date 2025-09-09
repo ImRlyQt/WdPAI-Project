@@ -66,6 +66,7 @@ if (!$u) {
             <img src="https://avatars.githubusercontent.com/u/583231?v=4" alt="Profile picture">
             <h2><?php echo htmlspecialchars($u['nick']); ?></h2>
             <p><?php echo $isPublic ? 'This is a public profile.' : 'Welcome to your profile!'; ?></p>
+            <div id="card-count" class="card-count" aria-live="polite">Cards: 0</div>
 
             <!-- Search bar do kart w klaserze -->
             <?php if (!$isPublic || $isAdmin): ?>
@@ -180,6 +181,9 @@ function loadMyCards(){
         .then(r=>r.json())
         .then(cards=>{
             const wrap = document.getElementById('my-cards');
+            const total = Array.isArray(cards) ? cards.reduce((sum, c) => sum + (Number(c.quantity)||1), 0) : 0;
+            const cnt = document.getElementById('card-count');
+            if (cnt) cnt.textContent = `Cards: ${total}`;
             if (!Array.isArray(cards) || cards.length===0){ wrap.innerHTML = '<div style="color:#aaa;">No cards yet. Search above to add some.</div>'; return; }
                     wrap.innerHTML = cards.map(c=>{
                         const src = c.image_url || (c.multiverseid ? `https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=${c.multiverseid}&type=card` : '');
