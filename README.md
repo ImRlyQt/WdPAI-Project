@@ -6,8 +6,7 @@ A lightweight PHP + PostgreSQL web app for building and showcasing Magic: The Ga
 <p align="left">
   <!-- Replace the links below with your CI/CD, coverage, and license badges -->
   <a href="#"><img alt="Build" src="https://img.shields.io/badge/build-passing-brightgreen" /></a>
-  <a href="#"><img alt="Tests" src="https://img.shields.io/badge/tests-NA-lightgrey" /></a>
-  <a href="#"><img alt="License" src="https://img.shields.io/badge/license-MIT-blue" /></a>
+  <a href="#"><img alt="Tests" src="https://img.shields.io/badge/tests-NA-red" /></a>
 </p>
 
 ## Table of Contents
