@@ -1,6 +1,10 @@
 <?php
-// register_action.php - handle registration POST
+// register_action.php - handle registration POST via AuthService
 require_once __DIR__ . '/config/db.php';
+require_once __DIR__ . '/src/autoload.php';
+require_once __DIR__ . '/src/Repository/UserRepository.php';
+require_once __DIR__ . '/src/Service/AuthService.php';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nick = trim($_POST['nick'] ?? '');
     $email = trim($_POST['email'] ?? '');
@@ -10,19 +14,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: registration.php?error=missing');
         exit();
     }
-    $hash = password_hash($password, PASSWORD_DEFAULT);
     try {
-        $stmt = $conn->prepare('INSERT INTO users (nick, email, password, dob) VALUES (:nick, :email, :password, :dob)');
-        $stmt->execute([
-            ':nick' => $nick,
-            ':email' => $email,
-            ':password' => $hash,
-            ':dob' => $dob
-        ]);
+        $userRepo = new UserRepository($conn);
+        $auth = new AuthService($conn, $userRepo);
+        $auth->register($nick, $email, $dob, $password);
         header('Location: login.php?registered=1');
         exit();
     } catch (PDOException $e) {
-        // Unique violation (email exists)
         if ($e->getCode() == '23505') {
             header('Location: registration.php?error=exists');
             exit();
