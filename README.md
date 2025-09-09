@@ -41,9 +41,7 @@ A lightweight PHP + PostgreSQL web app for building and showcasing Magic: The Ga
 - Full collection view: 
 
 ![Collection](screens/collection.png)
-- Diagram ERD: 
 
-![Collection](screens/ERD.png)
 
 ## Features
 - [x] User registration and login (hashed passwords)
@@ -141,16 +139,10 @@ The schema is initialized automatically from `init.sql`.
 - Users, user_cards, and a unique constraint on `(user_id, card_id)`.
 - Admin user seeded and enforced idempotently by email.
 
-Add a diagram image here:
+Diagram ERD:
 
-`![Schema](docs/schema.png)`
 
-## Contributing
-- Fork the repo and create a feature branch
-- Keep PRs small and focused; include screenshots of UI changes
-- Use prepared statements for DB access; avoid hardcoding secrets
-- Discuss larger architectural changes in issues first
-
+![Collection](screens/ERD.png)
 
 
 ## License
